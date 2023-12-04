@@ -1,0 +1,56 @@
+---
+- name: installing docker on target server
+  hosts: docker_host
+  become: true
+  vars_prompt: 
+    - name: username
+      prompt: "please enter your username"
+  vars_prompt: 
+    - name: password
+      prompt: "please enter your password"
+  tasks:
+    - name: Update apt repository
+      apt:
+        update_cache: true
+
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+          - python3-pip
+          - virtualenv
+          - python3-setuptools
+        state: latest
+        update_cache: true
+    - name: Add Docker 
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Start docker 
+      service: 
+        name: docker
+        state: started
+    - name: Running ngins container
+      command: docker run -it -d --name nginx-example-docker -p 443:80 nginx
+    - name: login to dockerhub
+      command: docker login -u "{{username}}" -p "{{password}}"
+    - name: Add tag to image
+     command: docker tag nginx adesuposusan89/nginx
+    - name: Pushing nginx container to private docker hub
+      command: docker push adesuposusan89/nginx
+      
