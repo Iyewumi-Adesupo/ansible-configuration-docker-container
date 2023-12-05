@@ -3,11 +3,10 @@
   hosts: docker_host
   become: true
   vars_prompt: 
-    - name: "{{items}}"
-      prompt: "please enter your password"
-      loop: 
-        - username
-        - password
+    - name: username
+      prompt: "Enter username"
+    - name: password
+      prompt: "Enter password"
   tasks:
     - name: Update apt repository
       apt:
@@ -40,13 +39,17 @@
         name: docker-ce
         state: latest
         update_cache: true
-
-    - name: Start docker 
-      service: 
+    - name: Start docker
+      service:
         name: docker
         state: started
+    - name: docker pull 
+      command: docker pull nginx
+    - name: Add tag to image
+      command: docker tag nginx sueade/nginx
     - name: login to dockerhub
-      command: docker login -u "{{username}}" -p "{{password}}"
-    - name: Running ngins container
-      command: docker run -it -d --name nginx-example-docker -p 443:80 asueade/nginx
-      
+      command: docker login -u {{username}} -p {{password}}
+    - name: Pushing nginx container to private docker hub
+      command: docker push sueade/nginx
+    - name: Running nginx container
+      command: docker run -it -d --name nginx-example-docker -p 443:80 sueade/nginx
