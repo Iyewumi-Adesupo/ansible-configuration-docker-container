@@ -34,7 +34,7 @@ The following instructions, along with accompanying scripts, illustrate the proc
 Ensure Ansible is installed on your machine. You can install Ansible on various operating systems. But Ubuntu will be used for this container
 
 Step 1:
-Ansible user data script is created using Terraform. Then we created the local block file which is on line 1 and 2.  
+Ansible user data script is created using Terraform. Then the local block file is created which is on line 1 and 2.  
 
 <img width="553" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/8cd774aa-341f-4576-ab7c-06759994d965">
 
