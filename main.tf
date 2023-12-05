@@ -102,10 +102,10 @@ resource "local_file" "ssh_key" {
 
 # creating ansible server
 resource "aws_instance" "ansible-server" {
-  ami                    = ami-0505148b3591e4c07
+  ami                    = "ami-00983e8a26e4c9bd9"
   instance_type          = "t2.micro"
   subnet_id              = aws_default_subnet.default_az1.id
-  vpc_security_group_ids = [aws_security_group.aws_security_group.ansible-sg]
+  vpc_security_group_ids = [aws_security_group.ansible-sg.id]
   key_name               = aws_key_pair.pub_key.key_name
   user_data              = local.ansible-user-data
 
@@ -116,10 +116,10 @@ resource "aws_instance" "ansible-server" {
 
 # creating docker container
 resource "aws_instance" "docker-nginx-container" {
-  ami                    = ami-0505148b3591e4c07
+  ami                    = "ami-00983e8a26e4c9bd9"
   instance_type          = "t2.micro"
   subnet_id              = aws_default_subnet.default_az1.id
-  vpc_security_group_ids = [aws_security_group.aws_security_group.ansible-sg]
+  vpc_security_group_ids = [aws_security_group.docker-nginx-sg.id]
   key_name               = aws_key_pair.pub_key.key_name
 
   tags = {
