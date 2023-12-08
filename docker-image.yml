@@ -24,7 +24,7 @@
           - python3-setuptools
         state: latest
         update_cache: true
-    - name: Add Docker 
+    - name: Add Docker key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
@@ -49,7 +49,7 @@
       command: docker tag nginx sueade/nginx
     - name: login to dockerhub
       command: docker login -u {{username}} -p {{password}}
-    - name: Pushing nginx container to private docker hub
+    - name: Pushing tag image to private docker hub
       command: docker push sueade/nginx
     - name: Running nginx container
       command: docker run -it -d --name nginx-example-docker -p 443:80 sueade/nginx
