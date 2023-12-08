@@ -69,9 +69,9 @@ sudo bash -c 'echo "StrictHostKeyChecking No" >> /etc/ssh/ssh_config': This line
 <img width="503" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/f2048ec2-9934-4360-9d0f-f676dbdce055">
 
 Step 8: 
-echo "${tls_private_key.key_pair.private_key_pem}" >> /home/ubuntu/public_key.pem: This line appends the contents of the private key (presumably stored in the tls_private_key.key_pair.private_key_pem variable) to a file named public_key.pem in the /home/ubuntu/ directory. The echo command is used to output the content, and >> appends it to the specified file.
+echo "${tls_private_key.key_pair.private_key_pem}" >> /home/ubuntu/key.pem: This line appends the contents of the private key (presumably stored in the tls_private_key.key_pair.private_key_pem variable) to a file named key.pem in the /home/ubuntu/ directory. The echo command is used to output the content, and >> appends it to the specified file.
 
-<img width="588" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/61bc9b01-348b-40ad-a86b-274df927bc79">
+<img width="536" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/e1df86e3-c58c-4f1f-a5c8-901cc2c41409">
 
 Step 9: 
 echo "${file("./docker-image.yml")}" >> /home/ubuntu/docker-image.yml: This line appends the content of the file located at ./docker-image.yml to a file named docker-image.yml in the /home/ubuntu/ directory. The echo command is used to output the content of the file, and >> appends it to the specified file.
@@ -79,14 +79,14 @@ echo "${file("./docker-image.yml")}" >> /home/ubuntu/docker-image.yml: This line
 <img width="502" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/c606b687-ad28-4987-8eae-bd41c7836e59">
 
 Step 10:
-sudo chown ubuntu:ubuntu /home/ubuntu/public_key.pem: This line changes the ownership of the public_key.pem file to the user ubuntu and the group ubuntu. The sudo command is used for elevated privileges.
+sudo chown ubuntu:ubuntu /home/ubuntu/key.pem: This line changes the ownership of the key.pem file to the user ubuntu and the group ubuntu. The sudo command is used for elevated privileges.
 
-<img width="396" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/1f16a6e2-9285-4c0e-b2fe-98e9657736cd">
+<img width="377" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/84ef1470-85ee-4b0f-971b-9585fc848cf8">
 
 Step 11:
-chmod 400 authentise /home/ubuntu/public_key.pem: This line sets the file permissions for the public_key.pem file. It restricts access to the file, allowing only the owner to read the contents.
+chmod 400 authentise /home/ubuntu/key.pem: This line sets the file permissions for the key.pem file. It restricts access to the file, allowing only the owner to read the contents.
 
-<img width="374" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/1882a0a4-ebeb-4a2c-8bce-e729c2a36bf8">
+<img width="287" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/132ed4b1-17ac-4db0-9b83-47492924422c">
 
 Step 12:
 touch /etc/ansible/hosts: This line creates an empty file named hosts in the /etc/ansible/ directory. In Ansible, the hosts file is used to define the inventory of remote hosts that Ansible will manage.
@@ -106,13 +106,13 @@ cat <<EOT> /etc/ansible/hosts: This line uses the cat command in combination wit
 Step 15:
 [docker_host]: This line adds a group named docker_host to the Ansible inventory file (/etc/ansible/hosts). In Ansible, groups help organize and manage hosts.
 
-${aws_instance.docker-nginx-container.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/public_key.pem: This line adds a host entry to the docker_host group. It specifies the public IP address of an AWS EC2 instance (${aws_instance.docker-nginx-container.public_ip}) as the target host. It also sets the Ansible user to ubuntu and specifies the path to the private key file used for SSH authentication (ansible_ssh_private_key_file=/home/ubuntu/public_key.pem).
+${aws_instance.docker-nginx-container.public_ip} ansible_user=ubuntu ansible_ssh_private_key_file=/home/ubuntu/key.pem: This line adds a host entry to the docker_host group. It specifies the public IP address of an AWS EC2 instance (${aws_instance.docker-nginx-container.public_ip}) as the target host. It also sets the Ansible user to ubuntu and specifies the path to the private key file used for SSH authentication (ansible_ssh_private_key_file=/home/ubuntu/key.pem).
 
 In summary, this script is preparing the Ansible inventory file by setting its ownership, creating a group (docker_host), and adding a host entry with specific configuration details for connecting to an AWS EC2 instance. The sudo command is used to execute privileged operations, and the cat command with a "here document" is employed to manage the content of the Ansible inventory file.
 
 <img width="785" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/c8519735-4762-4c76-a19e-099187d7fc6f">
 
-<img width="803" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/d3090d9c-09da-4b69-9be5-be31d90a4b34">
+<img width="619" alt="image" src="https://github.com/Iyewumi-Adesupo/ansible-configuration-docker-container/assets/135404420/e50602a8-848e-4ebb-9c02-77248627590b">
 
 Note that the Ansible data script in step 9 is responsible for transmitting the playbook. The YAML file for the playbook is generated utilizing variables and then this playbook is executed with certain arguments. The arguments employed in executing the playbook are outlined below.
 
