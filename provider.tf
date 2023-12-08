@@ -3,6 +3,3 @@ provider "aws" {
   profile = "sueade"
 }
 
-locals {
-  name = "authentise"
-}

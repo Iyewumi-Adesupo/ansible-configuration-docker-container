@@ -20,7 +20,7 @@ resource "aws_default_subnet" "default_az1" {
   }
 }
 
-# create security group for the docker-nginx-sg
+# create security group for the instance where docker engine will be installed
 resource "aws_security_group" "docker-nginx-sg" {
   name        = "docker-nginx-container"
   description = "allow access on ports 22 and 443"
@@ -55,9 +55,9 @@ resource "aws_security_group" "docker-nginx-sg" {
   }
 }
 
-# create security group for the ansible-sg
+# create security group for instance where ansible will be installed
 resource "aws_security_group" "ansible-sg" {
-  name        = "ec2 security group"
+  name        = "ansible security group"
   description = "allow access on ports 22"
   vpc_id      = aws_default_vpc.default_vpc.id
 
@@ -88,11 +88,12 @@ resource "tls_private_key" "key_pair" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
-
+#generating the public key
 resource "aws_key_pair" "pub_key" {
-  key_name   = "public_key"
+  key_name   = "key"
   public_key = tls_private_key.key_pair.public_key_openssh
 }
+#creating a file and adding the private key to the file and making it available locally using local file resource
 
 resource "local_file" "ssh_key" {
   filename = "${aws_key_pair.pub_key.key_name}.pem"
@@ -100,13 +101,13 @@ resource "local_file" "ssh_key" {
 }
 
 
-# creating ansible server
+# creating an instance to install ansible server 
 resource "aws_instance" "ansible-server" {
-  ami                    = "ami-00983e8a26e4c9bd9"
+  ami                    = "ami-00983e8a26e4c9bd9"  #Ubuntu ami
   instance_type          = "t2.micro"
-  subnet_id              = aws_default_subnet.default_az1.id
+  subnet_id              = aws_default_subnet.default_az1.id  
   vpc_security_group_ids = [aws_security_group.ansible-sg.id]
-  key_name               = aws_key_pair.pub_key.key_name
+  key_name               = aws_key_pair.pub_key.key_name   #to connect to the instance
   user_data              = local.ansible-user-data
 
   tags = {
@@ -114,9 +115,9 @@ resource "aws_instance" "ansible-server" {
   }
 }
 
-# creating docker container
+# creating an instance and installing docker engine and running nginx container
 resource "aws_instance" "docker-nginx-container" {
-  ami                    = "ami-00983e8a26e4c9bd9"
+  ami                    = "ami-00983e8a26e4c9bd9" #Ubuntu ami
   instance_type          = "t2.micro"
   subnet_id              = aws_default_subnet.default_az1.id
   vpc_security_group_ids = [aws_security_group.docker-nginx-sg.id]
