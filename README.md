@@ -1,5 +1,5 @@
 <h1 align="center" id="title">Ansible-configuration-dockerised-container</h1>
-<p id="description"> Docker is a platform for developing, shipping, and running applications in containers. Containers are lightweight, portable, and self-sufficient, making it easy to deploy applications consistently across different environments. Nginx is a popular web server and reverse proxy server that is often used in containers for serving web applications. 
+<p id="description"> Docker is an open-source platform for developing, shipping, and running applications in containers. Containers are lightweight, portable, and self-sufficient, making it easy to deploy applications consistently across different environments. Nginx is a popular web server and reverse proxy server that is often used in containers for serving web applications. 
 This is a Dockerized container application using the Nginx image on Ubuntu. An EC2 instance will be provisioned, featuring an Ubuntu 22.04 image. Then Nginx Docker container will be deployed on this instance using an Ansible playbook.
 Required Docker packages are installed to enable the execution of a container on the instance as shown below:
 
